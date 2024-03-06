@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Modelo para criação de CloudFormation a partir do yaml.
+
+Parameters:
+  TagsProject:
+    Type: String
+    Default: "Devops"
+  TagsTeam:
+    Type: String
+    Default: "Adatech"
+
+Resources:
+  MonitoringSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Security group for monitoring
+      SecurityGroupIngress: 
+        - IpProtocol: tcp 
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress: 
+        - IpProtocol: tcp 
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: sg-monitoring
+        - Key: Project
+          Value: !Ref TagsProject
+        - Key: Team
+          Value: !Ref TagsTeam
+  MonitoringInstance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: "ami-03c951bbe993ea087"
+      InstanceType: t2.micro
+      SecurityGroups: 
+        - !Ref MonitoringSG
+      IamInstanceProfile: "arn:aws:iam::601931402457:role/ec2-custom"
+      UserData: 
+        Fn::Base64: | 
+          #!/bin/bash
+          yum update -y 
+          amazon-linux-extras install docker 
+          service docker start 
+          usermod -a -G docker ec2-user
+      Tags:
+        - Key: Name
+          Value: ec2-monitoring
