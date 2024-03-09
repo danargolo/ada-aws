@@ -6,18 +6,18 @@ Parameters:
     Type: String
     Description: Region AWS
     Default: us-east-1
-  GitHubToken:
-    Type: String
-    Description: Token acesso github
-    Default: ""
+  # GitHubToken:
+  #   Type: String
+  #   Description: Token acesso github
+  #   Default:
   RepositoryECR:
     Type: String
     Description: Repositorio Imagem ECR
-    Default: "601931402457.dkr.ecr.us-east-1.amazonaws.com/api"
+    Default: 601931402457.dkr.ecr.us-east-1.amazonaws.com
   DockerFilePath:
     Type: String
     Description: Path Dockerfile 
-    Default: "application/api/Dockerfile"
+    Default: application
 
 Resources:
   CodeBuildProject:
@@ -31,7 +31,7 @@ Resources:
         Location: https://github.com/danargolo/provisionamento-aws
         Auth:
           Type: OAUTH
-          Resource: !Ref GitHubToken
+          Resource: 
         GitCloneDepth: 1
         BuildSpec: |
 
@@ -40,16 +40,18 @@ Resources:
             pre_build:
               commands:
                 - echo Login AWS ECR
-                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | \
-                  docker login --username AWS \ 
-                  --password-stdin "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+                - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --password-stdin --username AWS "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
             build:
               commands:
                 - echo Build init on `date`
-                - docker build -t $REPOSITORY_URL_ECR:latest -f $DOCKER_FILE_PATH .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/api:latest -f application/api/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend:latest -f application/frontend/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest -f application/worker/Dockerfile .
                 - echo Build complete on `date`
                 - echo Push image to ECR
-                - docker push $REPOSITORY_URL_ECR:latest
+                - docker push $REPOSITORY_URL_ECR/api:latest
+                - docker push $REPOSITORY_URL_ECR/frontend:latest
+                - docker push $REPOSITORY_URL_ECR/worker:latest
       Artifacts:
         Type: NO_ARTIFACTS          
       Environment:
