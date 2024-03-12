@@ -27,7 +27,7 @@ Resources:
         Location: https://github.com/danargolo/provisionamento-aws
         Auth:
           Type: OAUTH
-          Resource: '{{resolve:secretsmanager:GitHubAccessToken:SecretString:GitHubAccessToken:AWSCURRENT}}'
+          Resource: '{{resolve:secretsmanager:secrets:SecretString:githubKey:AWSCURRENT}}'
         GitCloneDepth: 1
         BuildSpec: |
 
@@ -40,14 +40,14 @@ Resources:
             build:
               commands:
                 - echo Build init on `date`
-                - docker build -t $REPOSITORY_URL_ECR/api:latest -f application/api/Dockerfile .
-                - docker build -t $REPOSITORY_URL_ECR/frontend:latest -f application/frontend/Dockerfile .
-                - docker build -t $REPOSITORY_URL_ECR/worker:latest -f application/worker/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.comn/api:latest -f application/api/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend:latest -f application/frontend/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest -f application/worker/Dockerfile .
                 - echo Build complete on `date`
                 - echo Push image to ECR
-                - docker push $REPOSITORY_URL_ECR/api:latest
-                - docker push $REPOSITORY_URL_ECR/frontend:latest
-                - docker push $REPOSITORY_URL_ECR/worker:latest
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/api:latest
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest
       Artifacts:
         Type: NO_ARTIFACTS          
       Environment:
