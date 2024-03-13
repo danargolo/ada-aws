@@ -40,7 +40,7 @@ Resources:
             build:
               commands:
                 - echo Build init on `date`
-                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.comn/api:latest -f application/api/Dockerfile .
+                - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/api:latest -f application/api/Dockerfile .
                 - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend:latest -f application/frontend/Dockerfile .
                 - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest -f application/worker/Dockerfile .
                 - echo Build complete on `date`
