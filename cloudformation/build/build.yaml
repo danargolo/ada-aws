@@ -45,9 +45,9 @@ Resources:
                 - docker build -t 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest -f application/worker/Dockerfile .
                 - echo Build complete on `date`
                 - echo Push image to ECR
-                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/api:latest
-                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
-                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker:latest
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/api
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/frontend
+                - docker push 601931402457.dkr.ecr.us-east-1.amazonaws.com/worker
       Artifacts:
         Type: NO_ARTIFACTS          
       Environment:
