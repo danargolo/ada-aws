@@ -19,7 +19,7 @@ RUN npm ci && \
  mv /usr/local/app/node_modules /node_modules
 
 COPY . .
-ADD ./server.js ./frontend.js
+ADD application/frontend/server.js ./frontend.js
 
 ENV PORT 80
 EXPOSE 80
